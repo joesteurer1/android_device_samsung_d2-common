@@ -36,6 +36,9 @@ TARGET_KERNEL_SELINUX_CONFIG := m2selinux_defconfig
 
 TARGET_BOOTLOADER_BOARD_NAME := MSM8960
 
+# Adreno configuration
+BOARD_EGL_CFG := device/samsung/d2-common/configs/egl.cfg
+
 # Recovery
 BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/samsung/d2-common/recovery/recovery_keys.c
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
@@ -53,6 +56,9 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1572864000
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 28651290624
 BOARD_FLASH_BLOCK_SIZE := 131072
 
+# twrp
+DEVICE_RESOLUTION := 720x1280
+
 # bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/samsung/d2-common/bluetooth
 BOARD_BLUEDROID_VENDOR_CONF := device/samsung/d2-common/bluetooth/vnd_d2.txt
@@ -69,39 +75,13 @@ BOARD_HAVE_DOCK_USBAUDIO := true
 #camera abi compatiblily
 TARGET_DISPLAY_INSECURE_MM_HEAP := true
 COMMON_GLOBAL_CFLAGS += -DQCOM_BSP_CAMERA_ABI_HACK
+TARGET_NEED_DISABLE_AUTOFOCUS := true
+ifeq ($(filter cm_apexqtmo cm_expressatt,$(TARGET_PRODUCT)),)
+  TARGET_NEED_CAMERA_ZSL := true
+endif
+
+# Needed for blobs
+COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 
 # Separate audio devices for VOIP
 BOARD_USES_SEPERATED_VOIP := true
-
-# SELinux
-BOARD_SEPOLICY_DIRS += \
-        device/samsung/d2-common/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-        file_contexts \
-        property_contexts \
-        te_macros \
-        bridge.te \
-        camera.te \
-        conn_init.te \
-        device.te \
-        dhcp.te \
-        domain.te \
-        drmserver.te \
-        file.te \
-        kickstart.te \
-        init.te \
-        mediaserver.te \
-        mpdecision.te \
-        netmgrd.te \
-        property.te \
-        qmux.te \
-        rild.te \
-        rmt.te \
-        sensors.te \
-        surfaceflinger.te \
-        system.te \
-        tee.te \
-        thermald.te \
-        ueventd.te \
-        wpa_supplicant.te
